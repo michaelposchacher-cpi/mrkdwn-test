@@ -10,6 +10,7 @@ jobs:
     steps:
       - name: Loading repository variables to real env vars
         id: environment
+        if: env.FOO != ''
         run: |
           ## Iterate over the input variables
           ## output them in a format so we can run and update the env variables 
