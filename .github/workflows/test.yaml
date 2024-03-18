@@ -1,0 +1,28 @@
+---
+name: test
+
+on:  
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Loading repository variables to real env vars
+        id: environment
+        run: |
+          ## Iterate over the input variables
+          ## output them in a format so we can run and update the env variables 
+          ## making use of $GITHUB_ENV
+          echo "$ALLMYVARS" | jq -r 'keys[] as $k | "echo \"\($k)=\(.[$k] )\" >> $GITHUB_ENV"' > ./update_env.sh
+          chmod +x ./update_env.sh
+          ./update_env.sh
+        shell: bash
+        env:
+          ALLMYVARS: '{"VAR1":"bla"}'
+          
+      - name: Output testing
+        id: output
+        run: |
+          echo "Dynamic Var ${{ env.VAR1 }}"
+          echo "Dynamic Var $VAR1"
